@@ -26,15 +26,35 @@ app.use(
 
 app.setHandler({
     LAUNCH() {
-        return this.toIntent('HelloWorldIntent');
+        this.ask('Hey John! Would you like to know your vacation balance?', 'Would you like to know your vacation balance?');
     },
 
-    HelloWorldIntent() {
-        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
+    BalanceIntent() {
+        this.tell('John, your vacation balance for the current pay period is 100 hours.');
     },
 
-    MyNameIsIntent() {
-        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+    'AMAZON.YesIntent'() {
+        return this.toIntent('BalanceIntent');
+    },
+
+    'YesIntent'() {
+        return this.toIntent('AMAZON.YesIntent');
+    },
+
+    'AMAZON.NoIntent'() {
+        this.tell('Ok. Bye for now.');
+    },
+
+    'NoIntent'() {
+        return this.toIntent('AMAZON.NoIntent');
+    },
+
+    'AMAZON.FallbackIntent'() {
+        this.ask('I\'m sorry, I can\'t help with that, Would you like to know your vacation balance?', 'Would you like to know your vacation balance?');
+    },
+
+    'Default Fallback Intent'() {
+        return this.toIntent('AMAZON.FallbackIntent');
     },
 });
 
