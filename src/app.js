@@ -10,6 +10,7 @@ const { GoogleAssistant } = require('jovo-platform-googleassistant');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
 const rp = require('request-promise');
+const { Client } = require('pg');
 
 const app = new App();
 
@@ -61,7 +62,26 @@ app.setHandler({
             let response = await rp(options);
             data = JSON.parse(response);
         }
-        this.tell(data.name + ', your vacation balance for the current pay period is 100 hours.');
+        const client = new Client({
+            connectionString: process.env.Database_ConnStr,
+        });
+
+        await client.connect();
+
+        const text = `SELECT
+                            vd.balance
+                        FROM
+                            public."AspNetUsers" u,
+                            public.vacation_data vd
+                        WHERE
+                            u."Id" = vd.user_id
+                            AND u."UserName" = $1
+                            AND vd.start_date <= CURRENT_DATE
+                            AND vd.end_date >= CURRENT_DATE`;
+
+        const res = await client.query(text, [data.email]);
+        this.tell(data.name + ', your vacation balance for the current pay period is ' + res.rows[0].balance + ' hours.');
+        await client.end();
     },
 
     'AMAZON.YesIntent'() {
