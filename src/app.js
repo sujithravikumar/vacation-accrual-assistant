@@ -80,7 +80,12 @@ app.setHandler({
                             AND vd.end_date >= CURRENT_DATE`;
 
         const res = await client.query(text, [data.email]);
-        this.tell(data.name + ', your vacation balance for the current pay period is ' + res.rows[0].balance + ' hours.');
+        if (res != null && res.rows.length > 0) {
+            this.tell(data.name + ', your vacation balance for the current pay period is ' + res.rows[0].balance + ' hours.');
+        }
+        else {
+            this.tell('Sorry, I cannot find any data with your email address.');
+        }
         await client.end();
     },
 
