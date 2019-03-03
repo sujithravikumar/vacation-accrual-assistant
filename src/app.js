@@ -81,10 +81,13 @@ app.setHandler({
 
         const res = await client.query(text, [data.email]);
         if (res != null && res.rows.length > 0) {
-            this.tell(data.name + ', your vacation balance for the current pay period is ' + res.rows[0].balance + ' hours.');
+            this.tell(data.name + ', your vacation balance for the current pay period is '
+                + res.rows[0].balance + ' hours.');
         }
         else {
-            this.tell('Sorry, I cannot find any data with your email address.');
+            this.tell(`I\'m Sorry, I can\'t find any data with your email address.
+                Make sure the email address you are using here is same as the one
+                that you used in registering with Vacation Accrual Buddy.`);
         }
         await client.end();
     },
@@ -106,7 +109,8 @@ app.setHandler({
     },
 
     'AMAZON.FallbackIntent'() {
-        this.ask('I\'m sorry, I can\'t help with that, Would you like to know your vacation balance?', 'Would you like to know your vacation balance?');
+        this.ask('I\'m sorry, I can\'t help with that, Would you like to know your vacation balance?',
+            'Would you like to know your vacation balance?');
     },
 
     'Default Fallback Intent'() {
