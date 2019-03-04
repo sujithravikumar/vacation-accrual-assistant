@@ -62,6 +62,8 @@ app.setHandler({
             let response = await rp(options);
             data = JSON.parse(response);
         }
+        console.log('name: ' + data.name + ' email: ' + data.email);
+
         const client = new Client({
             connectionString: process.env.Database_ConnStr,
         });
@@ -85,9 +87,9 @@ app.setHandler({
                 + res.rows[0].balance + ' hours.');
         }
         else {
-            this.tell(`I\'m Sorry, I can\'t find any data with your email address.
-                Make sure the email address you are using here is same as the one
-                that you used in registering with Vacation Accrual Buddy.`);
+            this.tell('I\'m Sorry, I can\'t find any data with your email address. '+
+                'Make sure the email address you are using here is same as the one ' +
+                'that you used in registering with Vacation Accrual Buddy.');
         }
         await client.end();
     },
