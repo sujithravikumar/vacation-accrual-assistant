@@ -30,6 +30,7 @@ app.setHandler({
     LAUNCH() {
         if (!this.$request.getAccessToken()){
             if (this.isAlexaSkill()) {
+                this.$alexaSkill.showAccountLinkingCard();
                 this.tell('You must authenticate with your Amazon Account to use this skill');
             }
             else if (this.isGoogleAction()) {
