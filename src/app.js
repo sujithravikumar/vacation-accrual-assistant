@@ -38,7 +38,8 @@ app.setHandler({
             }
         }
         else {
-            this.ask('Welcome to Vacation Buddy! Would you like to know your vacation balance?', 'Would you like to know your vacation balance?');
+            this.ask('Welcome to Vacation Buddy! Would you like to know your vacation balance?',
+                'Would you like to know your vacation balance?');
         }
     },
 
@@ -118,6 +119,19 @@ app.setHandler({
 
     'Default Fallback Intent'() {
         return this.toIntent('AMAZON.FallbackIntent');
+    },
+
+    'AMAZON.HelpIntent'() {
+        this.ask('Hello there, welcome to Vacation Buddy! Would you like to know your vacation balance?',
+            'Would you like to know your vacation balance?');
+    },
+
+    'AMAZON.CancelIntent'() {
+        this.tell('Ok. Bye for now.');
+    },
+
+    'AMAZON.StopIntent'() {
+        return this.toIntent('AMAZON.CancelIntent');
     },
 });
 
