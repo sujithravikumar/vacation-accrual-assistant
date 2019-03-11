@@ -28,7 +28,7 @@ app.use(
 
 app.setHandler({
     LAUNCH() {
-        if (!this.$request.getAccessToken()){
+        if (!this.$request.getAccessToken()) {
             if (this.isAlexaSkill()) {
                 this.$alexaSkill.showAccountLinkingCard();
                 this.tell('You must authenticate with your Amazon Account to use this skill');
@@ -44,6 +44,9 @@ app.setHandler({
     },
 
     async BalanceIntent() {
+        if (!this.$request.getAccessToken()) {
+            return this.toIntent('LAUNCH');
+        }
         let data;
         if (this.isAlexaSkill()) {
             let url = `https://api.amazon.com/user/profile?access_token=${this.$request.getAccessToken()}`;
@@ -132,7 +135,7 @@ app.setHandler({
 
     'AMAZON.StopIntent'() {
         return this.toIntent('AMAZON.CancelIntent');
-    },
+    }
 });
 
 module.exports.app = app;
